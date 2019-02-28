@@ -12,11 +12,18 @@ enddate="20190217"
 startIndex1<-731 # Jan 1 2018
 startIndex2<-1004 #790 # Mar 1, 2018
 endIndex<-1143 # last data point index
-setwd("~/Personal/CryptoAnalytics/Crypto DCC Chart Auto v1")
+# setwd("~/Personal/CryptoAnalytics/Crypto DCC Chart Auto v1")
+setwd("C://Users//Yunpeng//Documents//GitHub//Judge-Research-Public-Tools")
 cmc_coin<-read.csv(file.path(getwd(),"input","cryptos_2.csv"), header = TRUE, sep=",")
 getwd()
 twindow=0
 source("0-JudgeReportFunctionLib.R")
+source(file.path(getwd(),"dataRetrieval","loadDailyCryptoData.R"))
+source(file.path(getwd(),"dataCleaning","createPriceMatrix.R"))
+source(file.path(getwd(),"dataCleaning","createReturnMatrix.R"))
+source(file.path(getwd(),"dataCleaning","createDccData_2.R"))
+source(file.path(getwd(),"dataAnalysis","estimateDccMatrix_2.R"))
+source(file.path(getwd(),"dataVisualization","plotDccdata.R"))
 # =======================================================================================
 
 # load library
