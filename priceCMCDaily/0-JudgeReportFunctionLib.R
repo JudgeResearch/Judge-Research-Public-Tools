@@ -19,87 +19,87 @@ loadDailyCryptoData <- function(folderCmc, fileName, tokenList, i) {
 }
 # =================================================
 createPriceMatrix<-function(dfname){
-  datetemp<- eval(parse(text = paste0(dfname, "$date")))
-  datetemp<-datetemp
+  datetemp <- eval(parse(text = paste0(dfname, "$date")))
+  datetemp <-datetemp
   datatemp <- eval(parse(text = paste0(dfname, "$close")))
   datatemp[which(is.infinite(datatemp))] <- NA
-  datatemp<-cbind(datetemp, datatemp)
-  datatemp<-as.data.frame(datatemp)
+  datatemp <-cbind(datetemp, datatemp)
+  datatemp <-as.data.frame(datatemp)
   return(datatemp)
 }
 # =================================================
 createReturnMatrix<-function(dfname){
-  datetemp<- eval(parse(text = paste0(dfname, "$date")))[-1]
+  datetemp <- eval(parse(text = paste0(dfname, "$date")))[-1]
   datatemp <- diff(log(eval(parse(text = paste0(dfname, "$close")))), lag=1)
   datatemp[which(is.infinite(datatemp))] <- NA
   
   # combine datatemp
-  datatemp<-cbind(datetemp, datatemp)
-  datatemp<-as.data.frame(datatemp)
+  datatemp <- cbind(datetemp, datatemp)
+  datatemp <- as.data.frame(datatemp)
   return(datatemp)
 }
 # =================================================
 createCoinSummary <- function(zz, tokenList, twindow) {
-  coinSummary[1]<-paste0(tokenList$fsym[i],"_",tokenList$tsym[i])
+  coinSummary[1] <- paste0(tokenList$fsym[i],"_",tokenList$tsym[i])
   # https://stackoverflow.com/questions/6465222/access-zoo-or-xts-index
-  coinSummary[2]<-as.character(as.Date(index(zz)[1]))
-  coinSummary[3]<-as.character(as.Date(index(zz)[length(zz)]))
-  coinSummary[4]<-length(zz)
+  coinSummary[2] <- as.character(as.Date(index(zz)[1]))
+  coinSummary[3] <- as.character(as.Date(index(zz)[length(zz)]))
+  coinSummary[4] <- length(zz)
   if(coinSummary[4]>(twindow+100)) {
-    zzz<-auto.arima(zz[(1+twindow):length(zz)])
+    zzz <- auto.arima(zz[(1+twindow):length(zz)])
   } else {
-    zzz<-auto.arima(zz[1:length(zz)])
+    zzz <- auto.arima(zz[1:length(zz)])
   }
-  coinSummary[5:7]<-rbind(arimaorder(zzz))
-  coinSummary[8]<-if(coinSummary[i,4]>(twindow+100)) twindow else 0
+  coinSummary[5:7] <- rbind(arimaorder(zzz))
+  coinSummary[8]   <- if(coinSummary[i,4]>(twindow+100)) twindow else 0
   return(coinSummary)
 }
 
 createCoinSummary_2 <- function(zz, cmc_coin, twindow, i) {
-  coinSummary[1]<-paste0(cmc_coin$coin[i],"_USD")
+  coinSummary[1]    <- paste0(cmc_coin$coin[i],"_USD")
   # https://stackoverflow.com/questions/6465222/access-zoo-or-xts-index
-  coinSummary[2]<-as.character(as.Date(index(zz)[1]))
-  coinSummary[3]<-as.character(as.Date(index(zz)[length(zz)]))
-  coinSummary[4]<-length(zz)
+  coinSummary[2]    <- as.character(as.Date(index(zz)[1]))
+  coinSummary[3]    <- as.character(as.Date(index(zz)[length(zz)]))
+  coinSummary[4]    <- length(zz)
   if(coinSummary[4]>(twindow+100)) {
-    zzz<-auto.arima(zz[(1+twindow):length(zz)])
+    zzz <- auto.arima(zz[(1+twindow):length(zz)])
   } else {
-    zzz<-auto.arima(zz[1:length(zz)])
+    zzz <- auto.arima(zz[1:length(zz)])
   }
-  coinSummary[5:7]<-rbind(arimaorder(zzz))
-  coinSummary[8]<-if(coinSummary[i,4]>(twindow+100)) twindow else 0
+  coinSummary[5:7] <- rbind(arimaorder(zzz))
+  coinSummary[8]   <- if(coinSummary[i,4]>(twindow+100)) twindow else 0
   return(coinSummary)
 }
 # =================================================
-loadSp500Data<-function(folderSp, sp500DataFile){
-  datatemp<-read.table(file.path(folderSp,sp500DataFile), header=TRUE, sep=",", stringsAsFactors = FALSE, comment.char = "")
-  datatemp$fsym<-"SP500"
-  datatemp$tsym<-"Index"
-  datatemp<-datatemp[,c(1,8:9, 3:5,2,6:7)]
-  colnames(datatemp)<-c("date","fsym","tsym","open","high","low","close","vol.f", "sp500_r")
+loadSp500Data <- function(folderSp, sp500DataFile){
+  datatemp      <- read.table(file.path(folderSp,sp500DataFile), header=TRUE, sep=",", stringsAsFactors = FALSE, comment.char = "")
+  datatemp$fsym <- "SP500"
+  datatemp$tsym <- "Index"
+  datatemp <- datatemp[,c(1,8:9, 3:5,2,6:7)]
+  colnames(datatemp) <- c("date","fsym","tsym","open","high","low","close","vol.f", "sp500_r")
   return(datatemp)
 }
 # =================================================
 # Model Estimation Functions
-createDccData_2<-function(x_r, coinSummary, i, j){
+createDccData_2 <- function(x_r, coinSummary, i, j){
 # generate the data for dcc analysis
-data1<-eval(parse(text=paste0("x_r$",coinSummary[i,1])))
-data1<-data1[paste(startdate,enddate, sep="/"), colnames(data1)]
+data1           <- eval(parse(text=paste0("x_r$",coinSummary[i,1])))
+data1           <- data1[paste(startdate,enddate, sep="/"), colnames(data1)]
 # twindow<-coinSummary[i,8]
 # if(coinSummary[i,4]>(twindow+100)) {
 #   data1<-(data1[(1+twindow):length(data1)])
 # }
-data2<-eval(parse(text=paste0("x_r$",coinSummary[j,1])))
-data2<-data2[paste(startdate,enddate, sep="/"), colnames(data2)]
+data2           <- eval(parse(text=paste0("x_r$",coinSummary[j,1])))
+data2           <- data2[paste(startdate,enddate, sep="/"), colnames(data2)]
 # if(coinSummary[j,4]>(twindow+100)) {
 #   data2<-(data2[(1+twindow):length(data2)])
 # }
-x12 <- merge(data1, data2)
-tst <- na.approx(na.trim(x12, side="both"))
+x12             <- merge(data1, data2)
+tst             <- na.approx(na.trim(x12, side="both"))
 return(tst)
 }
 # =================================================
-estimateDCCMatrix_2<-function(tst, coinSummary, i, j){
+estimateDCCMatrix_2 <- function(tst, coinSummary, i, j){
   garch_1_d.spec = ugarchspec(mean.model = list(armaOrder = c(min(1,max(coinSummary[i,2],0)),coinSummary[i,4])),
                               variance.model = list(garchOrder = c(1,1),
                                                     model = "sGARCH"), distribution.model = "norm")
@@ -107,24 +107,24 @@ estimateDCCMatrix_2<-function(tst, coinSummary, i, j){
                               variance.model = list(garchOrder = c(1,1),
                                                     model = "sGARCH"), distribution.model = "norm")
   # dcc specification - GARCH(1,1) for conditional correlations
-  dcc.spec <-multispec( list(garch_1_d.spec, garch_2_d.spec) )
+  dcc.spec          <- multispec( list(garch_1_d.spec, garch_2_d.spec) )
   dcc.garch12_d.spec = dccspec(uspec = dcc.spec, dccOrder = c(1,1), distribution = "mvnorm")
   
   # run dcc-garch model
-  dcc.fit <- dccfit(dcc.garch12_d.spec, data = tst, fit.control=list(scale=TRUE))
+  dcc.fit           <- dccfit(dcc.garch12_d.spec, data = tst, fit.control=list(scale=TRUE))
   
   # Obtain conditional Correlation..
   r1=rcor(dcc.fit, type="R")
   r1.z=zoo(r1[1,2,], order.by=time(tst))
-  datetemp<-index(r1.z)
-  datatemp<-as.data.frame(r1.z)
-  colnames(datatemp)<-"datatemp"
-  datatemp<-cbind(datetemp, datatemp)
+  datetemp <- index(r1.z)
+  datatemp <- as.data.frame(r1.z)
+  colnames(datatemp) <- "datatemp"
+  datatemp <- cbind(datetemp, datatemp)
   return(datatemp)
 }
 # =================================================
 # Charting Functions
-numformat <- function(val) { sub("^(-?)0.", "\\1.", sprintf("%.1f", val)) }
+numformat  <- function(val) { sub("^(-?)0.", "\\1.", sprintf("%.1f", val)) }
 
 per_format <- function(m){sprintf("%1.0f%%", 100*m)}
 
@@ -168,7 +168,7 @@ plotDccdata<-function(date_vec, time_label, y_label, timeFreq, dcc_vec, data1_p,
   title(ylab="DCC Estimate", line=3, cex.lab=1.5)
 
   par(new=T)
-  max_v<-max(max(data1_p, na.rm=TRUE),max(data2_p, na.rm=TRUE))
+  max_v <- max(max(data1_p, na.rm=TRUE),max(data2_p, na.rm=TRUE))
   plot(as.Date(date_vec), data1_p, ylim=c(0,max_v), type="l",col="gray50",xaxt="n",yaxt="n",xlab="",ylab="")
   # https://stackoverflow.com/questions/11775692/how-to-specify-the-actual-x-axis-values-to-plot-as-x-axis-ticks-in-r
   axis(4, col=grey(.95), at = seq(0, max_v, by = round(max_v/6)))
@@ -217,7 +217,7 @@ plotDccdataLine<-function(date_vec, time_label, y_label, timeFreq, dcc_vec, data
     fg = grey(.2),	 # foreground color
     bg = grey(.95),
     family= "serif",
-    mar=c(6,6,2,4)   # https://nicercode.github.io/guides/plotting/
+    mar= c(6,6,2,4)   # https://nicercode.github.io/guides/plotting/
   )
   
   plot(as.Date(date_vec), dcc_vec, type="l",
@@ -235,7 +235,7 @@ plotDccdataLine<-function(date_vec, time_label, y_label, timeFreq, dcc_vec, data
   title(ylab="DCC Estimate", line=3, cex.lab=1.5)
   
   par(new=T)
-  max_v<-max(max(data1_p, na.rm=TRUE),max(data2_p, na.rm=TRUE))
+  max_v <- max(max(data1_p, na.rm=TRUE),max(data2_p, na.rm=TRUE))
   plot(as.Date(date_vec), data1_p, ylim=c(0,max_v), type="l",col="gray50",xaxt="n",yaxt="n",xlab="",ylab="")
   # https://stackoverflow.com/questions/11775692/how-to-specify-the-actual-x-axis-values-to-plot-as-x-axis-ticks-in-r
   axis(4, col=grey(.95), at = seq(0, max_v, by = round(max_v/6,1)))
@@ -250,15 +250,15 @@ plotDccdataLine<-function(date_vec, time_label, y_label, timeFreq, dcc_vec, data
        col="red", lwd=1.5, axes = FALSE, xlab = "", ylab = "")
   
   par(new=TRUE)
-  date_vec1<-rep(date_vec[match(as.Date("2018-11-28"),date_vec)], length(date_vec))
-  line_vec<-seq(0, max_v, max_v/(length(date_vec)-1))
+  date_vec1 <- rep(date_vec[match(as.Date("2018-11-28"),date_vec)], length(date_vec))
+  line_vec  <- seq(0, max_v, max_v/(length(date_vec)-1))
   plot(date_vec1, line_vec, type="p",
        xlim=c(date_vec[1], date_vec[length(date_vec)]), 
        ylim=c(0,max_v),col="gray30",axes = FALSE, xlab = "", ylab = "", lwd=1.5)
 
   par(new=TRUE)
-  date_vec2<-rep(date_vec[match(as.Date("2019-02-17"),date_vec)], length(date_vec))
-  line_vec<-seq(0, max_v, max_v/(length(date_vec)-1))
+  date_vec2 <- rep(date_vec[match(as.Date("2019-02-17"),date_vec)], length(date_vec))
+  line_vec  <- seq(0, max_v, max_v/(length(date_vec)-1))
   plot(date_vec2, line_vec, type="p",
        xlim=c(date_vec[1], date_vec[length(date_vec)]),
        ylim=c(0,max_v),col="gray30",axes = FALSE, xlab = "", ylab = "", lwd=1.5)
@@ -278,7 +278,7 @@ plotDccdataLine<-function(date_vec, time_label, y_label, timeFreq, dcc_vec, data
 
 # =================================================
 # plot 30 dcc in one chart
-plot30Dcc<-function(date_vec, time_label, y_label, data_dcc, data_p, tokenList){
+plot30Dcc <- function(date_vec, time_label, y_label, data_dcc, data_p, tokenList){
   par(
     lty = 1, 		  		  # lty = "blank", "solid", "dashed", "dotted", "dotdash", "longdash", or "twodash"			  
     lwd = 1,				  # function "lines" takes a vector of values for more than one line, and will cycle through that vector
@@ -321,7 +321,7 @@ plot30Dcc<-function(date_vec, time_label, y_label, data_dcc, data_p, tokenList){
   i=1
   j=1
   
-  vec_length<-length(data_dcc[,1])
+  vec_length <- length(data_dcc[,1])
 
     for (i in (1:1)){
     for (j in (2:30)){
@@ -337,15 +337,15 @@ plot30Dcc<-function(date_vec, time_label, y_label, data_dcc, data_p, tokenList){
       par(new=T)
       plot(as.Date(date_vec), dcc_vec, ylim=c(-1, 1), type="l",col=colors()[j+10],xaxt="n",yaxt="n",xlab="",ylab="", lwd=0.25, ann=FALSE)
       # https://stackoverflow.com/questions/11775692/how-to-specify-the-actual-x-axis-values-to-plot-as-x-axis-ticks-in-r
-      color_vec[j]<-colors()[j+10]
+      color_vec[j] <- colors()[j+10]
     }
   }    
   
-  data1_p<-eval(parse(text=paste0("data_p$BTC_USD_p")))
-  data1_p<-data1_p*(1/data1_p[max(which(data1_p>0)[1],424)]) # use 3/1/2017 as baseline if it is higher
+  data1_p <- eval(parse(text=paste0("data_p$BTC_USD_p")))
+  data1_p <- data1_p*(1/data1_p[max(which(data1_p>0)[1],424)]) # use 3/1/2017 as baseline if it is higher
   
   par(new=T)
-  max_v<-max(max(data1_p, na.rm=TRUE),max(data1_p, na.rm=TRUE))
+  max_v <- max(max(data1_p, na.rm=TRUE),max(data1_p, na.rm=TRUE))
   plot(as.Date(date_vec), data1_p,  ylim=c(0,max_v),type="l",col="gray30",xaxt="n",yaxt="n",xlab="",ylab="", lwd=1)
   axis(4, col=grey(.95), at = seq(0, max_v, by = 5*ceiling(max_v/70)))
 
@@ -361,7 +361,7 @@ plot30Dcc<-function(date_vec, time_label, y_label, data_dcc, data_p, tokenList){
 
 # =================================================
 # plot 30 price in one chart
-plot30Price<-function(date_vec, time_label, data_p, tokenList, startIndex, endIndex){
+plot30Price <- function(date_vec, time_label, data_p, tokenList, startIndex, endIndex){
   # par options for plot function
   par(
     lty = 1, 		  		  # lty = "blank", "solid", "dashed", "dotted", "dotdash", "longdash", or "twodash"			  
@@ -373,8 +373,8 @@ plot30Price<-function(date_vec, time_label, data_p, tokenList, startIndex, endIn
     yaxt ="s",	 		  # s=standard, n=suppress axis
     
     cex.lab  = 1.5, col.lab = grey(.6),  font.lab  = 6,	 #axis label size, color and font
-    cex.main =  1.2, col.main= grey(.4),  font.main = 8,		#main label, color and font
-    cex.sub  =  1.3, col.sub = grey(.4),  font.sub  = 6,		#sub label, color and font
+    cex.main = 1.2, col.main= grey(.4),  font.main = 8,		#main label, color and font
+    cex.sub  = 1.3, col.sub = grey(.4),  font.sub  = 6,		#sub label, color and font
     
     #tick marks
     lab = c(x=10,y=10,len=.1)	, # las = 	,		#number of ticks, las = axis labels 0 = default, 1=horizontal, 2 = perpendicular, 3 = vertical
@@ -391,15 +391,15 @@ plot30Price<-function(date_vec, time_label, data_p, tokenList, startIndex, endIn
   i=2
   max_vec=rep(0,30)
   for (i in 1:30){
-    data1_p<-data_p[startIndex:endIndex,i+1]
-    price_vec<-data1_p*(1/data1_p[max(which(data1_p>0)[1],1)])
+    data1_p   <-data_p[startIndex:endIndex,i+1]
+    price_vec <-data1_p*(1/data1_p[max(which(data1_p>0)[1],1)])
     max_vec[i]<-max(price_vec, na.rm = TRUE)
   }
   
   max_max_vec <- max(max_vec)
   color_vec=character()
   
-  data1_p<-data_p[startIndex:endIndex,2]
+  data1_p  <-data_p[startIndex:endIndex,2]
   price_vec<-data1_p*(1/data1_p[max(which(data1_p>0)[1],1)])
   
   plot(as.Date(date_vec), price_vec, type="l",
@@ -489,7 +489,7 @@ plotBnbPriceVolume<-function(date_vec, time_label, BNB_USD){
 
   par(new=T)
   barplot(BNB_USD$vol.f, beside=TRUE, yaxt="n", ylim = c(0,10^9))
-  max_vol<-max(BNB_USD$vol.f)
+  max_vol <- max(BNB_USD$vol.f)
 }
 # =================================================
 # plot Exchange Revenue
@@ -520,7 +520,7 @@ plotExRev<-function(exDailyRev){
   
   # plot the chart
   max_v=ceiling(max(exDailyRev$daily_rev)/10^6)*10^6
-  y_label<- seq(0, max_v, by = max_v/4)
+  y_label <- seq(0, max_v, by = max_v/4)
   
   barplot(exDailyRev$daily_rev, width = 5, space = NULL, xlab="", ylab="",
           names.arg = exDailyRev$exchange, las=2, border=0, yaxt="n",
@@ -531,7 +531,7 @@ plotExRev<-function(exDailyRev){
 
 # =================================================
 # plot Token Correlation Matrix
-plotCorrMatrix<-function(cormat){
+plotCorrMatrix <- function(cormat){
   par(
     lty = 1, 		  		  # lty = "blank", "solid", "dashed", "dotted", "dotdash", "longdash", or "twodash"			  
     lwd = 1,				  # function "lines" takes a vector of values for more than one line, and will cycle through that vector

@@ -55,7 +55,7 @@ if(!require(crypto)){install.packages("crypto"); library(crypto)} # crypto packa
 # scrape data from cmc
 i<-1
 for (i in (1:length(cmc_coin$coin))){
-  data_temp<-crypto_history(coin = cmc_coin$coin[i], start_date = startdate, end_date = enddate)
+  data_temp <- crypto_history(coin = cmc_coin$coin[i], start_date = startdate, end_date = enddate)
   assign(paste0(cmc_coin$coin[i], "_USD"),data_temp)
   save(data_temp, 
        file=file.path(getwd(),"rdata",paste0("price_daily_cmc_", cmc_coin$coin[i],"_usd_",startdate, "-",enddate,".rdata")))
