@@ -1,4 +1,4 @@
-plotBnbPriceVolume<-function(date_vec, time_label, BNB_USD){
+plotPriceVolume<-function(date_vec, time_label, ticker_USD){
   par(
     lty = 1, 		  		  # lty = "blank", "solid", "dashed", "dotted", "dotdash", "longdash", or "twodash"			  
     lwd = 1,				  # function "lines" takes a vector of values for more than one line, and will cycle through that vector
@@ -24,10 +24,10 @@ plotBnbPriceVolume<-function(date_vec, time_label, BNB_USD){
   )
   
   # plot the chart
-  max_v=max(BNB_USD$close)
+  max_v=max(ticker_USD$close)
   y_label<- seq(0, max_v, by = 5*ceiling(max_v/60))
   
-  plot(as.Date(date_vec), BNB_USD$close, type="l",
+  plot(as.Date(date_vec), ticker_USD$close, type="l",
        ylab="",
        xlab="",
        xaxt="n",
@@ -41,6 +41,6 @@ plotBnbPriceVolume<-function(date_vec, time_label, BNB_USD){
   title(ylab="BNB Price", line=3, cex.lab=1.5)
   
   par(new=T)
-  barplot(BNB_USD$vol.f, beside=TRUE, yaxt="n", ylim = c(0,10^9))
-  max_vol<-max(BNB_USD$vol.f)
+  barplot(ticker_USD$vol.f, beside=TRUE, yaxt="n", ylim = c(0,10^9))
+  max_vol<-max(ticker_USD$vol.f)
 }
