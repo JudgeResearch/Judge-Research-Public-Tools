@@ -1,0 +1,1 @@
+numformat <- function(val) { sub("^(-?)0.", "\\1.", sprintf("%.1f", val)) }
