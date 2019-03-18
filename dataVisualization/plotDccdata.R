@@ -1,3 +1,76 @@
+#---------------------------------------------------------------------------------
+#
+# NAME:
+#       plotDccdata.R
+#
+# PURPOSE:
+#       plot 2 DCC data series with BTC price
+#
+# CATEGORY:
+#       Data Visualization
+#
+# CALLING SEQUENCE:
+#       plotDccdata(date_vec, time_label, y_label, timeFreq, dcc_vec, data1_p, data2_p, coinSummary_2, i, j){
+#       
+# REQUIRED INPUTS:
+#     ___
+#     (1) date_vec
+#         data used by x-axis
+#     ___
+#     (2) time_label
+#         label used for charting
+#     __
+#     (3) y_label
+#         text label used for charting
+#     __
+#     (4) timeFreq
+#         frequency for charting
+#     __
+#     (5) dcc_vec
+#         data DCC vector
+#     __
+#     (6) data1_p
+#         data price vecctor
+#     __
+#     (7) data2_p
+#         data price vector 
+#     __
+#     (8) coinSummary_2
+#         reference for ticker name and base
+#
+# OPTIONAL INPUTS:
+#     ___
+#     (1) none
+#         
+# KEYWORD PARAMETERS:
+#     none
+#
+# OUTPUTS:
+#     (1) none
+#     (2) 
+#     (3) 
+#
+# OPTIONAL OUTPUTS:
+#     none
+# 
+# RESTRICTIONS:
+#     (1) 
+#
+# REQUIREMENTS:
+#     (1) none
+#     (2) 
+#     (3) 
+#
+# REFERENCES:       
+#
+# Next Steps (If not done) :
+#     This script can be enhanced as follows:
+#     (1) none
+#     (2) 
+#     (3) 
+#
+#
+#----------------------------------------------------------------------------------
 plotDccdata<-function(date_vec, time_label, y_label, timeFreq, dcc_vec, data1_p, data2_p, coinSummary_2, i, j){
   par(
     lty = 1, 		  		  # lty = "blank", "solid", "dashed", "dotted", "dotdash", "longdash", or "twodash"			  

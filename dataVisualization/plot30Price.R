@@ -10,7 +10,7 @@
 #       Data Visualization
 #
 # CALLING SEQUENCE:
-#       plot30Price<-function(date_vec, time_label, data_p, tokenList, startIndex, endIndex)
+#       plot30Price(date_vec, time_label, data_p, tokenList, startIndex, endIndex)
 #       
 # REQUIRED INPUTS:
 #     ___

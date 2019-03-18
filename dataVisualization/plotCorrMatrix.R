@@ -1,3 +1,53 @@
+#---------------------------------------------------------------------------------
+#
+# NAME:
+#       plotCorMatrix.R
+#
+# PURPOSE:
+#       Plot correlation matrix
+#
+# CATEGORY:
+#       DataVisualization
+#
+# CALLING SEQUENCE:
+#       plotCorrMatrix(cormat)
+#       
+# REQUIRED INPUTS:
+#     ___
+#     (1) cormat
+#         data correlation matrix
+#
+#
+# OPTIONAL INPUTS: 
+#     none
+#   
+# KEYWORD PARAMETERS:
+#     none
+#
+# OUTPUTS:
+#     (1) plot multiple DCC data series in one chart
+#
+# OPTIONAL OUTPUTS:
+#     none
+# 
+# RESTRICTIONS:
+#     (1)
+#
+# REQUIREMENTS:
+#     (1)
+#     (2) 
+#     (3) 
+#
+# REFERENCES:       
+#
+# Next Steps (If not done) :
+#     This script can be enhanced as follows:
+#     (1) 
+#     (2) 
+#     (3) 
+#
+#
+#----------------------------------------------------------------------------------
 # plot Token Correlation Matrix
 plotCorrMatrix<-function(cormat){
   par(
