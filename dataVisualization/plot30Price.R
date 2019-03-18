@@ -1,4 +1,69 @@
-# plot 30 price in one chart
+#---------------------------------------------------------------------------------
+#
+# NAME:
+#       plot30Price.R
+#
+# PURPOSE:
+#       Plot 30 price in graph
+#
+# CATEGORY:
+#       Data Visualization
+#
+# CALLING SEQUENCE:
+#       plot30Price<-function(date_vec, time_label, data_p, tokenList, startIndex, endIndex)
+#       
+# REQUIRED INPUTS:
+#     ___
+#     (1) date_vec
+#         data used by x-axis
+#     ___
+#     (2) time_label
+#         label used for charting
+#     __
+#     (3) data_p
+#         data used for charting
+#     __
+#     (4) tokenList
+#         dataframe of DCC data
+#     __
+#     (5) startIndex
+#         dataframe of price data
+#     __
+#     (6) endIndex
+#         dataframe of tokens for loop reference
+#
+# OPTIONAL INPUTS:
+#     none
+#
+# KEYWORD PARAMETERS:
+#     none
+#
+# OUTPUTS:
+#     (1) none
+#     (2) 
+#     (3) 
+#
+# OPTIONAL OUTPUTS:
+#     none
+# 
+# RESTRICTIONS:
+#     (1) 
+#
+# REQUIREMENTS:
+#     (1) none
+#     (2) 
+#     (3) 
+#
+# REFERENCES:       
+#
+# Next Steps (If not done) :
+#     This script can be enhanced as follows:
+#     (1) none
+#     (2) 
+#     (3) 
+#
+#
+#----------------------------------------------------------------------------------
 plot30Price<-function(date_vec, time_label, data_p, tokenList, startIndex, endIndex){
   # par options for plot function
   par(
